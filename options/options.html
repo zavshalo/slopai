@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>SlopAI Options</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="options.css"></head>
+  <body>
+    <header class="row"><img src="../assets/icon-32.png" width="24" height="24" alt="SlopAI"><h1>SlopAI Options</h1></header>
+    <section class="card">
+      <label>Enable detection <input type="checkbox" id="enabled"></label>
+      <label>Ollama URL <input type="text" id="ollamaUrl" placeholder="http://127.0.0.1:11434"></label>
+      <label>Model <input type="text" id="model" placeholder="mistral"></label>
+      <label>Max characters per post <input type="number" id="maxCharsPerPost" min="200" max="8000" step="100"></label>
+      <label>Request timeout (ms) <input type="number" id="timeoutMs" min="3000" max="60000" step="500"></label>
+      <div class="row"><button id="saveBtn">Save</button><button id="healthBtn">Check health</button><div id="saveMsg" class="muted"></div></div>
+    </section>
+    <script type="module" src="options.js"></script>
+  </body></html>
