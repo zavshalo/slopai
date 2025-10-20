@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       headers["Authorization"] = `Key ${process.env.SAPLING_KEY}`;
     }
 
-    const sapling = await fetch("https://api.sapling.ai/api/v1/aidetect", {
+    const sapling = await fetch("https://api.sapling.ai/api/v1/aidetect-demo", {
       method: "POST",
       headers,
       body: JSON.stringify({ text })
