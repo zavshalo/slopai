@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/v1/aidetect.js",
+      "use": "@vercel/node"
+    }
+  ]
+}
