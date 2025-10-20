@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  // Enable CORS for browser extensions
+  // Enable CORS for the browser extension
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -15,8 +15,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = await req.json();
-    const text = body.text || "";
+    // ✅ FIX: Manually read the request body for Node.js runtime
+    let body = "";
+    for await (const chunk of req) body += chunk;
+    const data = JSON.parse(body || "{}");
+
+    const text = data.text || "";
     if (!text.trim()) {
       return res.status(400).json({ error: "Missing text" });
     }
@@ -34,12 +38,11 @@ export default async function handler(req, res) {
       body: JSON.stringify({ text })
     });
 
-    const data = await sapling.json();
-    console.log(`→ Sapling ${sapling.status} ai_prob=${data.ai_probability ?? "?"}`);
-    res.status(sapling.status).json(data);
+    const result = await sapling.json();
+    console.log(`→ Sapling ${sapling.status} ai_prob=${result.ai_probability ?? "?"}`);
+    res.status(sapling.status).json(result);
   } catch (err) {
     console.error("Proxy error:", err);
     res.status(500).json({ error: "Proxy failure", detail: String(err) });
   }
 }
-
