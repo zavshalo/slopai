@@ -1,6 +1,7 @@
+// Force Node runtime so process.env and standard fetch work
 export const config = { runtime: "nodejs" };
 
-console.log("ACTIVE FUNCTION BUILD >>> vBypassAuthStrip");
+console.log("ACTIVE FUNCTION BUILD >>> vQueryParamKey");
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -9,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Sapling-Key");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   try {
     const { text } = req.body || {};
@@ -19,19 +20,14 @@ export default async function handler(req, res) {
 
     console.log(`[${new Date().toISOString()}] len=${text.length}`);
 
+    // 🔑  Temporary embedded key — works via query string
     const SAPLING_KEY = "WS5D5ZJV0IWP8X45PVOJXDRNPXTJ3L9G";
 
-    const headers = {
-      "Content-Type": "application/json",
-      "X-Sapling-Key": SAPLING_KEY, // use safe custom header
-    };
+    const saplingURL = `https://api.sapling.ai/api/v1/aidetect?key=${SAPLING_KEY}`;
 
-    // Copy into Authorization manually right before sending
-    headers["authorization"] = `Key ${SAPLING_KEY}`;
-
-    const sapling = await fetch("https://api.sapling.ai/api/v1/aidetect", {
+    const sapling = await fetch(saplingURL, {
       method: "POST",
-      headers,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
     });
 
@@ -44,4 +40,5 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "Proxy failure", detail: err.message });
   }
 }
+
 
