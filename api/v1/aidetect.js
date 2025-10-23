@@ -1,3 +1,7 @@
+export const config = {
+  runtime: "nodejs"
+};
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Only POST allowed" });
@@ -15,7 +19,6 @@ export default async function handler(req, res) {
 
     console.log(`[${new Date().toISOString()}] len=${text.length}`);
 
-    // ✅ Define headers BEFORE setting Authorization
     const headers = { "Content-Type": "application/json" };
 
     const key = process.env.SAPLING_KEY || process.env.SAPLING_API_KEY;
@@ -36,3 +39,4 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "Proxy failure", detail: err.message });
   }
 }
+
