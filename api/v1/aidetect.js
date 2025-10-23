@@ -15,9 +15,11 @@ export default async function handler(req, res) {
 
     console.log(`[${new Date().toISOString()}] len=${text.length}`);
 
+    // ✅ Define headers BEFORE setting Authorization
     const headers = { "Content-Type": "application/json" };
-    if (process.env.SAPLING_KEY)
-      headers["Authorization"] = `Key ${process.env.SAPLING_KEY}`;
+
+    const key = process.env.SAPLING_KEY || process.env.SAPLING_API_KEY;
+    if (key) headers["Authorization"] = `Key ${key}`;
 
     const sapling = await fetch("https://api.sapling.ai/api/v1/aidetect", {
       method: "POST",
