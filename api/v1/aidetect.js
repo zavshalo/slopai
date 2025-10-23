@@ -1,6 +1,4 @@
-export const config = {
-  runtime: "nodejs"
-};
+export const config = { runtime: "nodejs" };
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -21,8 +19,9 @@ export default async function handler(req, res) {
 
     const headers = { "Content-Type": "application/json" };
 
-    const key = process.env.SAPLING_KEY || process.env.SAPLING_API_KEY;
-    if (key) headers["Authorization"] = `Key ${key}`;
+    // ✅ Embed key directly here (temporary)
+    const SAPLING_KEY = "WS5D5ZJV0IWP8X45PVOJXDRNPXTJ3L9G";
+    headers["Authorization"] = `Key ${SAPLING_KEY}`;
 
     const sapling = await fetch("https://api.sapling.ai/api/v1/aidetect", {
       method: "POST",
@@ -39,4 +38,5 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "Proxy failure", detail: err.message });
   }
 }
+
 
