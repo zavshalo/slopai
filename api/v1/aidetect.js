@@ -18,10 +18,8 @@ export default async function handler(req, res) {
     console.log(`[${new Date().toISOString()}] len=${text.length}`);
 
     const headers = { "Content-Type": "application/json" };
-
-    // ✅ Embed key directly here (temporary)
-    const SAPLING_KEY = "WS5D5ZJV0IWP8X45PVOJXDRNPXTJ3L9G";
-    headers["Authorization"] = `Key ${SAPLING_KEY}`;
+    // 🔑  Hard-code just to verify everything works
+    headers["Authorization"] = "Key WS5D5ZJV0IWP8X45PVOJXDRNPXTJ3L9G";
 
     const sapling = await fetch("https://api.sapling.ai/api/v1/aidetect", {
       method: "POST",
@@ -31,12 +29,9 @@ export default async function handler(req, res) {
 
     const data = await sapling.json();
     console.log(`→ Sapling ${sapling.status} ai_prob=${data.ai_probability ?? "?"}`);
-
     res.status(sapling.status).json(data);
   } catch (err) {
     console.error("Proxy error:", err);
     res.status(500).json({ error: "Proxy failure", detail: err.message });
   }
 }
-
-
